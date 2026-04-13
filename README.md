@@ -1,27 +1,80 @@
 # blueprint-ui
 
-Base de Design System replicable para la organización, distribuida con **shadcn registry**.
+Design System de Blueprint, distribuido como **shadcn registry**. Instalable en cualquier repo Next.js + shadcn en dos pasos.
 
-## Quick start
+---
+
+## Usar en otro repo
+
+### 1. Registrar el namespace
+
+En el `components.json` del repo consumidor, agregá la clave `registries`:
+
+```json
+{
+  "registries": {
+    "@blueprint": "https://blueprint-data.github.io/blueprintdata-ui/r/{name}.json"
+  }
+}
+```
+
+> Si ya tiene otros registries, solo agregá la clave `@blueprint` sin borrar las demás.
+
+### 2. Instalar
+
+```bash
+npx shadcn@latest add @blueprint/blueprint-core --overwrite
+```
+
+Esto instala automáticamente:
+
+- `src/components/ui/button.tsx`
+- `src/components/ui/input.tsx`
+- `src/components/ui/textarea.tsx`
+- `src/components/ui/card.tsx`
+- `src/components/ui/blueprint-card.tsx`
+- Tokens CSS (colores, radios, sombras, focus ring) en `globals.css`
+
+### 3. Usar
+
+```tsx
+import { BlueprintCard } from "@/components/ui/blueprint-card"
+import { Button } from "@/components/ui/button"
+
+export function Example() {
+  return (
+    <BlueprintCard title="Revenue" description="Last 30 days" interactive>
+      <Button>Ver detalle</Button>
+    </BlueprintCard>
+  )
+}
+```
+
+---
+
+## Componentes disponibles
+
+| Componente | Descripción |
+|---|---|
+| `Button` | Variantes `default`, `outline`, `secondary`, `ghost`, `link` + sizes `pill`, `pill-lg` |
+| `Input` | Input con tokens Blueprint (altura, radius, focus ring) |
+| `Textarea` | Textarea con tokens Blueprint |
+| `Card` | Card base con subcomponentes `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` |
+| `BlueprintCard` | Card clásica Blueprint con props `title`, `description`, `interactive` |
+
+---
+
+## Desarrollo en este repo
 
 ```bash
 npm install
-npm run dev
+npm run dev        # preview local
+npm run registry:build  # genera public/r/*.json
 ```
 
-## Build del registry
+### Estructura
 
-```bash
-npm run registry:build
-```
-
-Salida esperada: `public/r/blueprint-core.json`.
-
-## Estructura clave
-
-- `registry.json` → índice del registry
-- `registry/new-york/ui/*` → componentes distribuibles
-- `src/app/globals.css` → tokens y clases base
-- `docs/consumption.md` → cómo consumir en otros repos
-
-Incluye primitives base (`button`, `input`, `textarea`, `card`) y `blueprint-card` (card clásica de Blueprint).
+- `registry.json` → definición del registry (items, deps, CSS vars)
+- `registry/new-york/ui/` → fuente de los componentes
+- `public/r/` → output del build (servido por GitHub Pages)
+- `docs/consumption.md` → guía extendida de consumo
