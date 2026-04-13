@@ -22,8 +22,8 @@ npm run registry:build
 
 Publicá este repo (Vercel/Cloudflare) y asegurate que los JSON queden accesibles:
 
-- `https://ui.tu-dominio.com/r/registry.json`
-- `https://ui.tu-dominio.com/r/blueprint-core.json`
+- `https://blueprint-data.github.io/blueprintdata-ui/r/registry.json`
+- `https://blueprint-data.github.io/blueprintdata-ui/r/blueprint-core.json`
 
 Si todavía no inicializaste git en `blueprint-ui`:
 
@@ -40,7 +40,7 @@ En el repo consumidor, abrí `components.json` y agregá:
 ```json
 {
   "registries": {
-    "@blueprint": "https://ui.tu-dominio.com/r/{name}.json"
+    "@blueprint": "https://blueprint-data.github.io/blueprintdata-ui/r/{name}.json"
   }
 }
 ```
