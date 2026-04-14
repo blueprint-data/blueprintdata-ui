@@ -64,6 +64,31 @@ export function Example() {
 
 ---
 
+## Agent Skills (Claude Code)
+
+Las skills enseñan al agente todo sobre el design system: tokens, clases, componentes, patrones y reglas. Con ellas, Claude implementa UI Blueprint correctamente sin adivinar nada.
+
+### Instalar en tu proyecto
+
+```bash
+npx degit blueprint-data/blueprintdata-ui/.agents/skills .agents/skills
+```
+
+Descarga todas las skills disponibles a `.agents/skills/` de tu repo. Incluye:
+
+- `blueprint-ui` — tokens, clases bp-*, componentes, dark mode, patrones de composición
+- `vercel-react-best-practices` — performance, re-renders, async, bundling
+- `vercel-composition-patterns` — compound components, context, React 19
+- `tailwind-v4-shadcn` — setup production-ready Tailwind v4 + shadcn
+- `tailwind-css-patterns` — layout, responsive, animaciones
+- `accessibility` — WCAG, patrones a11y
+- `frontend-design` — principios de diseño UI/UX
+- `seo` — SEO técnico y on-page
+
+> Requiere que el proyecto tenga Claude Code configurado. Las skills se activan automáticamente cuando el agente detecta el contexto relevante.
+
+---
+
 ## Desarrollo en este repo
 
 ```bash
