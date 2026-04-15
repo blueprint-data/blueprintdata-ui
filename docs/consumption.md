@@ -60,6 +60,11 @@ Esto instala:
 - `src/components/ui/textarea.tsx`
 - `src/components/ui/card.tsx`
 - `src/components/ui/blueprint-card.tsx` (card clásica de Blueprint)
+- `src/components/ui/label.tsx` (label accesible basado en Radix)
+- `src/components/ui/animated-number.tsx` (contador animado)
+- `src/components/ui/animated-text.tsx` (reveal de texto por palabra)
+- `src/components/ui/card-3d.tsx` (efecto tilt 3D)
+- `src/components/ui/magnetic-button.tsx` (CTA con movimiento magnético)
 - Variables/tokens y reglas CSS en `src/app/globals.css`
 
 Uso rápido de la card clásica:

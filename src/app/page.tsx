@@ -2,9 +2,14 @@ import type { CSSProperties, ReactNode } from "react"
 
 import { BlueprintCard } from "@/components/ui/blueprint-card"
 import { Button } from "@/components/ui/button"
+import { Card3D } from "@/components/ui/card-3d"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { MagneticButton } from "@/components/ui/magnetic-button"
 import { Textarea } from "@/components/ui/textarea"
+import { AnimatedNumber } from "@/components/ui/animated-number"
+import { AnimatedText } from "@/components/ui/animated-text"
 
 type ColorTokenCase = {
   name: string
@@ -352,12 +357,12 @@ export default function Home() {
               "No hay label ni contexto semántico.",
               "Dependés solo del color para indicar error."
             ]}
-            snippet={'<label htmlFor="email">Email</label>\n<Input id="email" type="email" aria-invalid />'}
+            snippet={'<Label htmlFor="email">Email</Label>\n<Input id="email" type="email" aria-invalid />'}
             preview={
               <div className="space-y-3">
-                <label htmlFor="showcase-email" className="text-sm font-medium text-[var(--semantic-text-strong)]">
+                <Label htmlFor="showcase-email" className="text-[var(--semantic-text-strong)]">
                   Email
-                </label>
+                </Label>
                 <Input id="showcase-email" type="email" placeholder="nombre@empresa.com" />
                 <Input aria-invalid defaultValue="usuario@" aria-describedby="showcase-email-error" />
                 <p id="showcase-email-error" className="text-xs text-rose-600 dark:text-rose-300">
@@ -383,9 +388,9 @@ export default function Home() {
             snippet={'<Textarea\n  id="notes"\n  placeholder="Contanos el contexto..."\n/>'}
             preview={
               <div className="space-y-3">
-                <label htmlFor="showcase-notes" className="text-sm font-medium text-[var(--semantic-text-strong)]">
+                <Label htmlFor="showcase-notes" className="text-[var(--semantic-text-strong)]">
                   Notas
-                </label>
+                </Label>
                 <Textarea id="showcase-notes" placeholder="Escribí una descripción funcional..." />
               </div>
             }
@@ -409,6 +414,140 @@ export default function Home() {
               <BlueprintCard title="Revenue" description="Last 30 days" interactive>
                 <p className="text-sm text-[var(--semantic-text-body)]">+24.8% vs mes anterior</p>
               </BlueprintCard>
+            }
+          />
+
+          <ComponentCaseCard
+            title="AnimatedNumber"
+            summary="KPIs con entrada gradual y lectura estable"
+            useWhen={[
+              "Mostrás métricas clave (MRR, usuarios, conversión) en dashboards.",
+              "Querés dirigir atención al dato sin usar charts complejos.",
+              "Necesitás respetar prefers-reduced-motion automáticamente."
+            ]}
+            avoidWhen={[
+              "El número cambia en tiempo real varias veces por segundo.",
+              "Mostrás texto descriptivo largo (mejor usar AnimatedText).",
+              "No hay contexto de qué representa el valor."
+            ]}
+            snippet={'<AnimatedNumber end={24890} prefix="$" className="text-3xl font-semibold" />'}
+            preview={
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-[var(--semantic-border-subtle)] p-3">
+                  <p className="text-xs text-[var(--semantic-text-body)]">MRR</p>
+                  <AnimatedNumber end={24890} prefix="$" className="text-2xl font-semibold text-[var(--semantic-text-strong)]" />
+                </div>
+                <div className="rounded-xl border border-[var(--semantic-border-subtle)] p-3">
+                  <p className="text-xs text-[var(--semantic-text-body)]">Conversión</p>
+                  <AnimatedNumber end={42} suffix="%" delay={120} className="text-2xl font-semibold text-[var(--semantic-text-strong)]" />
+                </div>
+              </div>
+            }
+          />
+
+          <ComponentCaseCard
+            title="AnimatedText"
+            summary="Entrada narrativa palabra por palabra"
+            useWhen={[
+              "Querés destacar una propuesta de valor en hero o bloque de impacto.",
+              "Necesitás micro-interacción elegante sin librerías pesadas.",
+              "Buscás una lectura progresiva con buen contraste."
+            ]}
+            avoidWhen={[
+              "El contenido es legal o crítico y no debe esperar animación.",
+              "Hay párrafos extensos (el efecto pierde claridad).",
+              "Sección con alta densidad de interacciones simultáneas."
+            ]}
+            snippet={'<AnimatedText text="Tokens semánticos, decisiones consistentes." />'}
+            preview={
+              <div className="space-y-2">
+                <AnimatedText
+                  text="Tokens semánticos, decisiones consistentes y una UI que escala sin caos visual."
+                  className="text-lg font-semibold leading-relaxed text-[var(--semantic-text-strong)]"
+                  staggerMs={55}
+                />
+                <p className="text-sm text-[var(--semantic-text-body)]">Si activás reduced motion, el texto aparece sin animación.</p>
+              </div>
+            }
+          />
+
+          <ComponentCaseCard
+            title="Card3D"
+            summary="Profundidad interactiva para bloques destacados"
+            useWhen={[
+              "Querés destacar una card de plan, feature o CTA premium.",
+              "Hay suficiente espacio para hover sin saturar la pantalla.",
+              "La interacción aporta jerarquía visual real."
+            ]}
+            avoidWhen={[
+              "Listados largos con muchas cards simultáneas.",
+              "Usuarios mobile-first sin fallback claro.",
+              "Contenido donde movimiento distrae del objetivo principal."
+            ]}
+            snippet={'<Card3D intensity={0.8}><BlueprintCard interactive>...</BlueprintCard></Card3D>'}
+            preview={
+              <Card3D intensity={0.8} className="max-w-md">
+                <BlueprintCard title="Plan Growth" description="Interacción con tilt" interactive>
+                  <p className="text-sm text-[var(--semantic-text-body)]">Mové el cursor sobre la card para ver profundidad.</p>
+                </BlueprintCard>
+              </Card3D>
+            }
+          />
+
+          <ComponentCaseCard
+            title="MagneticButton"
+            summary="CTA con respuesta física al puntero"
+            useWhen={[
+              "Botón principal en landing o sección de conversión.",
+              "Querés feedback táctil/visual más expresivo que hover clásico.",
+              "Necesitás fallback automático para reduced motion y pointer coarse."
+            ]}
+            avoidWhen={[
+              "Flujos críticos donde cualquier movimiento sobra (ej. pagos).",
+              "Listas con muchos botones compactos juntos.",
+              "Cuando no podés mantener target size cómodo."
+            ]}
+            snippet={'<MagneticButton className="bp-btn bp-btn-primary h-10 px-5">Probar demo</MagneticButton>'}
+            preview={
+              <div className="flex flex-wrap gap-3">
+                <MagneticButton className="bp-btn bp-btn-primary h-10 px-5 py-2">Probar demo</MagneticButton>
+                <MagneticButton className="bp-btn bp-btn-outline h-10 px-5 py-2" strength={0.22}>
+                  Ver pricing
+                </MagneticButton>
+              </div>
+            }
+          />
+
+          <ComponentCaseCard
+            title="Label (Radix)"
+            summary="Etiquetas accesibles y consistentes para formularios"
+            useWhen={[
+              "Querés asociar claramente cada control con su texto visible.",
+              "Necesitás estados disabled/peer-disabled coherentes.",
+              "Buscás evitar labels sueltas sin semántica."
+            ]}
+            avoidWhen={[
+              "Usar placeholder como único reemplazo de label.",
+              "Ocultar contexto del campo por ahorro de espacio.",
+              "Repetir el mismo label para campos distintos sin aclaración."
+            ]}
+            snippet={'<Label htmlFor="company">Empresa</Label>\n<Input id="company" />'}
+            preview={
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="showcase-company" className="text-[var(--semantic-text-strong)]">
+                    Empresa
+                  </Label>
+                  <Input id="showcase-company" placeholder="Blueprint Data" />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="showcase-role" className="text-[var(--semantic-text-strong)]">
+                    Rol
+                  </Label>
+                  <Input id="showcase-role" placeholder="Frontend Architect" disabled />
+                </div>
+              </div>
             }
           />
         </div>

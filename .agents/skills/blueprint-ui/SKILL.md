@@ -8,10 +8,12 @@ description: |
   building forms, cards, or layouts with the Blueprint design language.
 
   Covers: registry installation, all CSS tokens (foundation/semantic/component),
-  bp-* class system, Button/Card/BlueprintCard/Input/Textarea component APIs,
-  dark mode via semantic tokens, and common composition patterns.
+  bp-* class system + motion helper classes, Button/Card/BlueprintCard/Input/
+  Textarea/Label APIs, and advanced motion components (AnimatedNumber,
+  AnimatedText, Card3D, MagneticButton), plus dark mode via semantic tokens.
 
   Keywords: blueprint-ui, blueprint-card, bp-btn, bp-card, bp-input, bp-textarea,
+  animated-number, animated-text, card-3d, magnetic-button, label,
   brand-primary, brand-secondary, semantic tokens, shadcn registry, @blueprint,
   blueprint-core, design system, blueprint components
 ---
@@ -57,7 +59,15 @@ This installs:
 - `src/components/ui/textarea.tsx`
 - `src/components/ui/card.tsx`
 - `src/components/ui/blueprint-card.tsx`
+- `src/components/ui/label.tsx`
+- `src/components/ui/animated-number.tsx`
+- `src/components/ui/animated-text.tsx`
+- `src/components/ui/card-3d.tsx`
+- `src/components/ui/magnetic-button.tsx`
 - CSS tokens injected into `globals.css`
+
+> `Label` depends on `@radix-ui/react-label`. If you're consuming this manually,
+> ensure it exists in `dependencies`.
 
 ### 3. Verify globals.css has the tokens
 
@@ -150,6 +160,18 @@ Always combine base + variant: `bp-btn bp-btn-primary`.
 ```
 
 Focus state is automatic: `border-color: --brand-primary-500`, ring via `--component-focus-ring`.
+
+### Motion helpers
+
+```css
+.magnetic-button /* Applies translate3d with --bp-magnetic-x/y variables */
+.card-3d         /* 3D context wrapper */
+.card-3d-inner   /* Inner element that receives rotateX/rotateY transforms */
+.bp-text-word    /* Word hook used by AnimatedText (inline transition styles) */
+```
+
+`AnimatedText` uses `bp-text-word` as a style hook; transitions are applied inline.
+`MagneticButton` and `Card3D` require the helper classes in `globals.css`.
 
 ---
 
@@ -251,6 +273,92 @@ import { Textarea } from "@/components/ui/textarea"
 
 `field-sizing-content` applied — auto-grows with content.
 
+### Label
+
+```tsx
+import { Label } from "@/components/ui/label"
+
+<Label htmlFor="email">Email</Label>
+<Input id="email" type="email" placeholder="you@example.com" />
+```
+
+Use `Label` instead of plain `<label>` in shared UI so disabled/peer states stay consistent.
+
+### AnimatedNumber
+
+```tsx
+import { AnimatedNumber } from "@/components/ui/animated-number"
+
+<AnimatedNumber end={24890} prefix="$" className="text-3xl font-semibold" />
+<AnimatedNumber end={42} suffix="%" duration={1400} delay={120} />
+```
+
+Props: `end`, `duration`, `delay`, `className`, `prefix`, `suffix`.
+
+Behavior:
+- Starts when visible in viewport (IntersectionObserver)
+- Uses easing (`easeOutQuart`) for smooth finish
+- Honors `prefers-reduced-motion` by rendering final value directly
+
+### AnimatedText
+
+```tsx
+import { AnimatedText } from "@/components/ui/animated-text"
+
+<AnimatedText
+  text="Tokens semánticos, decisiones consistentes."
+  className="text-lg font-semibold"
+  staggerMs={55}
+/>
+```
+
+Props: `text`, `className`, `wordClassName`, `delayMs`, `staggerMs`, `threshold`, `immediate`.
+
+Behavior:
+- Splits text by word and reveals with stagger
+- Triggers on intersection (unless `immediate`)
+- Honors `prefers-reduced-motion`
+
+### Card3D
+
+```tsx
+import { Card3D } from "@/components/ui/card-3d"
+import { BlueprintCard } from "@/components/ui/blueprint-card"
+
+<Card3D intensity={0.8} className="max-w-md">
+  <BlueprintCard title="Plan Growth" description="Interacción con tilt" interactive>
+    <p className="text-sm text-[var(--semantic-text-body)]">Hover para ver profundidad.</p>
+  </BlueprintCard>
+</Card3D>
+```
+
+Props: `children`, `className`, `intensity`.
+
+Behavior:
+- Pointer-based tilt with requestAnimationFrame interpolation
+- Disables animation on `prefers-reduced-motion` or coarse pointers
+
+### MagneticButton
+
+```tsx
+import { MagneticButton } from "@/components/ui/magnetic-button"
+
+<MagneticButton className="bp-btn bp-btn-primary h-10 px-5 py-2">
+  Probar demo
+</MagneticButton>
+
+<MagneticButton className="bp-btn bp-btn-outline h-10 px-5 py-2" strength={0.22}>
+  Ver pricing
+</MagneticButton>
+```
+
+Props: native button props + `strength`, `asChild`.
+
+Behavior:
+- Updates `--bp-magnetic-x/y` with pointer offset
+- Uses spring-like interpolation via RAF
+- Falls back to static position when disabled, reduced-motion, or coarse pointer
+
 ---
 
 ## Dark Mode
@@ -279,14 +387,55 @@ that sets `document.documentElement.classList.toggle('dark', isDark)`.
 
 ```tsx
 <div className="flex flex-col gap-1.5">
-  <label className="text-sm font-medium" style={{ color: 'var(--semantic-text-strong)' }}>
+  <Label htmlFor="email" className="text-[var(--semantic-text-strong)]">
     Email
-  </label>
-  <Input type="email" placeholder="you@example.com" />
+  </Label>
+  <Input id="email" type="email" placeholder="you@example.com" />
   <p className="text-xs" style={{ color: 'var(--semantic-text-body)' }}>
     We'll never share your email.
   </p>
 </div>
+```
+
+### KPI block with AnimatedNumber
+
+```tsx
+<div className="rounded-xl border border-[var(--semantic-border-subtle)] p-3">
+  <p className="text-xs text-[var(--semantic-text-body)]">MRR</p>
+  <AnimatedNumber
+    end={24890}
+    prefix="$"
+    className="text-2xl font-semibold text-[var(--semantic-text-strong)]"
+  />
+</div>
+```
+
+### Hero claim with AnimatedText
+
+```tsx
+<AnimatedText
+  text="Tokens semánticos, decisiones consistentes y una UI que escala."
+  className="text-xl font-semibold leading-relaxed text-[var(--semantic-text-strong)]"
+  staggerMs={55}
+/>
+```
+
+### Interactive premium card (Card3D)
+
+```tsx
+<Card3D intensity={0.8} className="max-w-md">
+  <BlueprintCard title="Plan Growth" description="Interacción con tilt" interactive>
+    <p className="text-sm text-[var(--semantic-text-body)]">Hover para ver profundidad.</p>
+  </BlueprintCard>
+</Card3D>
+```
+
+### Magnetic CTA button
+
+```tsx
+<MagneticButton className="bp-btn bp-btn-primary h-10 px-5 py-2" aria-label="Probar demo">
+  Probar demo
+</MagneticButton>
 ```
 
 ### CTA card
@@ -348,6 +497,8 @@ CSS variables that aren't covered by utility classes.
 - Combine `bp-btn` + `bp-btn-*` when writing raw HTML buttons (not using the Button component)
 - Use `Button asChild` to render links as buttons without losing BP styles
 - Pass `interactive` to `BlueprintCard` when the card is clickable/hoverable
+- Prefer `Label` over plain `<label>` for consistent form semantics
+- Keep motion components optional and graceful (`prefers-reduced-motion` respected)
 
 ### DON'T
 - Don't add `dark:` variants for colors that already use semantic BP tokens
@@ -355,6 +506,8 @@ CSS variables that aren't covered by utility classes.
 - Don't use `tailwind.config.ts` to define BP colors — they live in `globals.css`
 - Don't use foundation tokens (`--brand-primary-500`) directly in component text/bg unless intentional brand emphasis
 - Don't skip `--overwrite` on install — it ensures globals.css is updated
+- Don't use MagneticButton styles without `bp-btn` + variant classes (primary/outline/secondary)
+- Don't animate critical information if motion could hide meaning or delay comprehension
 
 ---
 

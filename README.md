@@ -33,6 +33,11 @@ Esto instala automáticamente:
 - `src/components/ui/textarea.tsx`
 - `src/components/ui/card.tsx`
 - `src/components/ui/blueprint-card.tsx`
+- `src/components/ui/label.tsx`
+- `src/components/ui/animated-number.tsx`
+- `src/components/ui/animated-text.tsx`
+- `src/components/ui/card-3d.tsx`
+- `src/components/ui/magnetic-button.tsx`
 - Tokens CSS (colores, radios, sombras, focus ring) en `globals.css`
 
 ### 3. Usar
@@ -61,6 +66,11 @@ export function Example() {
 | `Textarea` | Textarea con tokens Blueprint |
 | `Card` | Card base con subcomponentes `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` |
 | `BlueprintCard` | Card clásica Blueprint con props `title`, `description`, `interactive` |
+| `Label` | Wrapper sobre Radix Label para formularios accesibles y consistentes |
+| `AnimatedNumber` | Contador animado por viewport con soporte `prefers-reduced-motion` |
+| `AnimatedText` | Reveal palabra por palabra con stagger configurable |
+| `Card3D` | Contenedor con efecto tilt 3D por puntero (fallback en reduced motion/coarse pointer) |
+| `MagneticButton` | Botón con desplazamiento magnético usando variables CSS `--bp-magnetic-x/y` |
 
 ---
 
