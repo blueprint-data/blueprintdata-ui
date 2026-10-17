@@ -26,5 +26,8 @@
     "shadcn": "^3.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "ip-address": "10.7.1"
   }
 }
